@@ -5,16 +5,16 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import Container from "react-bootstrap/Container";
-import Caracteristicas from "./Caracteristicas";
-import Modal2 from "./Modal2";
+
+import Modal from "react-bootstrap/Modal";
 
 const MiApi = ({ valorBusqueda }) => {
   const [personajes, setPersonajes] = useState([]);
   const [cargando, setCargando] = useState(false);
-  const [estadoModal, setEstadoModal] = useState(false);
-  const [nombre, setNombre] = useState([]);
-  const [modalShow, setModalShow] = useState(false);
-
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const [nombre, setNombre] = useState({});
 
   useEffect(() => {
     getData();
@@ -31,19 +31,6 @@ const MiApi = ({ valorBusqueda }) => {
 
   return cargando ? (
     <Container>
-      <div>
-        
-        <Caracteristicas
-          children={nombre}
-          estado={estadoModal}
-          cambiarEstado={setEstadoModal}
-        />
-        <Modal2 
-        children={nombre}
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        />
-      </div>
       <Row>
         {personajes
           .filter((p) => {
@@ -60,28 +47,21 @@ const MiApi = ({ valorBusqueda }) => {
                       style={{ justifyContent: "center" }}
                     >
                       <Row>
-                        <Card.Title>{p.name}</Card.Title>
+                        <Card.Title style={{ textAlign: "center" }}>
+                          {p.name}
+                        </Card.Title>
                         <div
                           className="d-flex"
                           style={{ justifyContent: "center" }}
                         >
-                            <Button
-                             variant="primary"
-                             style={{ width: "10rem" }}
-                             onClick={() => {
-                               setEstadoModal(!estadoModal);
-                               setNombre(p);
-                             }}
-                            >
-                            modal 1
-                          </Button>
-                          
-                          <Button 
-                          variant="primary" 
-                          onClick={() => {
-                            setModalShow(true); 
-                            setNombre(p);}}>
-                            modal 2
+                          <Button
+                            variant="primary"
+                            onClick={() => {
+                              handleShow(false);
+                              setNombre(p);
+                            }}
+                          >
+                            Ver Mas
                           </Button>
                         </div>
                       </Row>
@@ -92,11 +72,50 @@ const MiApi = ({ valorBusqueda }) => {
             );
           })}
       </Row>
+      <>
+        <Modal show={show} onHide={handleClose}>
+          <div nombre={nombre}>
+            <Modal.Header>
+              <Modal.Title>{nombre.name}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="d-flex" style={{ justifyContent: "center" }}>
+                <img
+                  src={nombre.image}
+                  style={{ borderRadius: "100px", marginBottom: "3rem" }}
+                ></img>
+              </div>
+              <div>
+                <p>
+                  <strong>Tipo de especie:</strong> {nombre.species}
+                </p>
+                <p>
+                  <strong>Estado:</strong> {nombre.status}
+                </p>
+                <p>
+                  <strong>Genero:</strong> {nombre.gender}
+                </p>
+                <p>
+                  <strong>Planeta origen:</strong> {nombre.origin.name}
+                </p>
+                <p>
+                  <strong>Localidad:</strong> {nombre.location.name}
+                </p>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </div>
+        </Modal>
+      </>
     </Container>
   ) : (
     <div>
-        <h3>Cargando...</h3>
-        <Spinner animation="border" variant="success"/>
+      <h3>Cargando...</h3>
+      <Spinner animation="border" variant="success" />
     </div>
   );
 };
