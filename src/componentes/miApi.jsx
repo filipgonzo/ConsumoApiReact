@@ -14,7 +14,7 @@ const MiApi = ({ valorBusqueda }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [nombre, setNombre] = useState({});
+  const [nombre, setNombre] = useState([]);
 
   useEffect(() => {
     getData();
@@ -35,7 +35,7 @@ const MiApi = ({ valorBusqueda }) => {
         {personajes
           .filter((p) => {
             return p.name.toLowerCase().includes(valorBusqueda.toLowerCase());
-          })
+          }).sort((a, b) => a.name.localeCompare(b.name) )
           .map((p) => {
             return (
               <Col key={p.id} style={{ marginTop: "2vh" }}>
@@ -80,12 +80,13 @@ const MiApi = ({ valorBusqueda }) => {
             </Modal.Header>
             <Modal.Body>
               <div className="d-flex" style={{ justifyContent: "center" }}>
-                <img
+                <img 
+                  alt={nombre.name}
                   src={nombre.image}
                   style={{ borderRadius: "100px", marginBottom: "3rem" }}
-                ></img>
+                />
               </div>
-              <div>
+              <div nombre={[nombre]}>
                 <p>
                   <strong>Tipo de especie:</strong> {nombre.species}
                 </p>
@@ -95,11 +96,14 @@ const MiApi = ({ valorBusqueda }) => {
                 <p>
                   <strong>Genero:</strong> {nombre.gender}
                 </p>
+     
                 <p>
-                  <strong>Planeta origen:</strong> {nombre.origin.name}
+                  <strong>Localidad: </strong>
+                  {nombre.location ? nombre.location.name : " sin Localidad"}
                 </p>
                 <p>
-                  <strong>Localidad:</strong> {nombre.location.name}
+                  <strong>Origen: </strong>
+                  {nombre.origin ? nombre.origin.name : " Desconocido"}
                 </p>
               </div>
             </Modal.Body>
