@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+
 
 
 const Buscador = ({setValorBusqueda}) => {
@@ -27,14 +27,12 @@ const Buscador = ({setValorBusqueda}) => {
               onChange={(e)=>setValorCaja(e.target.value)}
 
             />
-            <Button variant="outline-success" onClick={()=>setValorBusqueda(valorCaja)}>Buscar</Button>
+            <Button variant="success" onClick={()=>setValorBusqueda(valorCaja)}>Buscar</Button>
           </Form>
         </Navbar.Collapse>
       </Container>
     </Navbar>
-    <section>
-        <Outlet></Outlet>
-    </section>
+
     </>
   )
 }
